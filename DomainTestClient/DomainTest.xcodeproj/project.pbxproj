@@ -243,8 +243,8 @@
 				TargetAttributes = {
 					BE75C41B1E136A900095FA47 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 5B9V7AZX7R;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = NK94TM64KF;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -341,9 +341,9 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 5B9V7AZX7R;
+				DEVELOPMENT_TEAM = NK94TM64KF;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -357,6 +357,8 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemoon.socketAppClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ad28e2e5-1bce-4781-9aad-94bd643aeb04";
+				PROVISIONING_PROFILE_SPECIFIER = shenzhen_socketAppClient_inHouse;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -378,9 +380,9 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = 5B9V7AZX7R;
+				DEVELOPMENT_TEAM = NK94TM64KF;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -394,6 +396,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemoon.socketAppClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ad28e2e5-1bce-4781-9aad-94bd643aeb04";
+				PROVISIONING_PROFILE_SPECIFIER = shenzhen_socketAppClient_inHouse;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

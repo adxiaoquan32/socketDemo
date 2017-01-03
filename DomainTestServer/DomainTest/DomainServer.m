@@ -78,6 +78,7 @@
 - (BOOL)start:(NSError **)error;
 {
     
+    // get ip address
     [self _getIp];
     
     
@@ -139,7 +140,6 @@
 - (IBAction)send:(id)sender;
 {
 
-    
     imTextMsgInfo *textMsg = [imTextMsgInfo new];
     textMsg.sender = self.serverUser;
     textMsg.receiver = nil;
