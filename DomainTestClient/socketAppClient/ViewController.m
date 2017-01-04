@@ -383,7 +383,10 @@
         pro.tag = enTransferType_textmsg;
         pro.data = textMsg;
         
-        [strongSelf.socket writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+        NSData *sendData = [publicFunc objetToJson:[pro getStructerData]];
+        //NSLog(@"___send:%@",[[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding]);
+        
+        [strongSelf.socket writeData:sendData withTimeout:-1 tag:0];
         [strongSelf.socket readDataWithTimeout:-1 tag:0];
         
         return textMsg;
