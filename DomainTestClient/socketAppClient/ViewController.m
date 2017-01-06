@@ -407,6 +407,11 @@
         [strongSelf.socket writeData:sendData withTimeout:-1 tag:0];
         [strongSelf.socket readDataWithTimeout:-1 tag:0];
         
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf.userTbView reloadData];
+        });
+        
+        
         return textMsg;
         
     }];
