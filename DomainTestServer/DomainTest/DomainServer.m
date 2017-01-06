@@ -165,11 +165,13 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag;
 {
-    NSLog(@"[Server] Received: %lu", (unsigned long)[data length]);
+    NSLog(@"[Server] Received: %lu :%@", (unsigned long)[data length],[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
   
     // parser data
     NSError *error = nil;
     id tranferDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    NSLog(@"__incoming:\n\n%@\n\n",tranferDic);
+    
     if ( tranferDic ) {
         transferProtocolInfo *transfer = [transferProtocolInfo modelWithDict:tranferDic];
         [self _parserData:transfer socket:sock data:data];
@@ -316,7 +318,9 @@
         transferProtocolInfo *pro = [transferProtocolInfo new];
         pro.tag = enTransferType_userList;
         pro.data = alluserExitself;
-        [sock writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+        NSData *wdata = [publicFunc objetToJson:[pro getStructerData]];
+        NSLog(@"___write:\n%@\n",[[NSString alloc] initWithData:wdata encoding:NSUTF8StringEncoding]);
+        [sock writeData:wdata withTimeout:-1 tag:0];
     }
     
     [self _layoutUserListUI];

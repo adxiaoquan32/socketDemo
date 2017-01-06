@@ -31,7 +31,6 @@
 {
     NSLog(@"____:%s____",__func__);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
 
 

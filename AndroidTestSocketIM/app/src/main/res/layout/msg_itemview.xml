@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/guest_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/guest_avatar_iv"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/guest_icon" />
+
+            <TextView
+                android:id="@+id/guest_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/guest_avatar_iv"
+                android:ellipsize="end"
+                android:maxWidth="60dp"
+                android:text=""
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/guest_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/shape_chat_green"
+            android:minWidth="60dp"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/me_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/me_avatar_iv"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/guest_icon" />
+
+        <TextView
+            android:id="@+id/me_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/me_avatar_iv"
+            android:background="@drawable/shape_edittext_blue"
+            android:minWidth="60dp"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+</RelativeLayout>

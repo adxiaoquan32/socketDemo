@@ -13,6 +13,8 @@
     #import "UIDevice+SZBMExtension.h"
 #endif
 
+#import "GCDAsyncSocket.h"
+
 @implementation publicFunc
 
 + (NSString *)getSystemUUID
@@ -42,12 +44,20 @@
 
 + (NSData*)objetToJson:(id)data
 {
+   
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&error];
     
-    return jsonData;
+    if ( !jsonData ) {
+        return nil;
+    }
+    
+    NSMutableData *rdata = [[NSMutableData alloc] initWithData:jsonData];
+    [rdata appendData:[GCDAsyncSocket CRLFData]];
+    
+    return rdata;
 }
 
 

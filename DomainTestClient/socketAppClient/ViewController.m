@@ -64,7 +64,25 @@
     
     self.navigationItem.leftBarButtonItem = leftBtnItem;
     
+    // -------------
+    [self _testSize];
+    
 }
+
+- (void)_testSize
+{
+    int _intv = 0;
+    NSInteger _integerv = 0;
+    long _longv = 0;
+    float _floatv = 0.0f;
+    
+    NSLog(@"\n\nint:%lu\nNSInteger:%lu\nlong:%lu\nfloat:%lu\nchar:%lu\nbyte:%lu\n\n",sizeof(_intv),sizeof(_integerv),sizeof(_longv),sizeof(_floatv),sizeof(char),sizeof(Byte));
+    
+    
+    
+}
+
+
 - (void)onLeftNaviItemClick:(id)sender
 {
     [self _profileShow:self.profileView.hidden];
@@ -332,7 +350,7 @@
     imUserInfo *userInfo = [_totalconnectedSockets objectAtIndex:indexPath.row];
     
     userMsgOb =  [_messageDic objectForKey:userInfo.userID];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %ld",userInfo.userName,userMsgOb.unReadNum];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@     (%ld)",userInfo.userName,userMsgOb.unReadNum];
     cell.textLabel.textColor = userInfo.state ==imState_online?[UIColor redColor]:[UIColor grayColor];
     
     
