@@ -41,6 +41,10 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *profile_to_right_constraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *profile_to_left_constraint;
 
+
+
+@property (strong, nonatomic)NSMutableData *msgDataCache;
+
 @end
 
 @implementation ViewController
@@ -56,11 +60,13 @@
     
     _selfUserInfo = [[imUserInfo alloc] init];
     
+    _msgDataCache = [[NSMutableData alloc] init];
+    
     _profile_to_right_const = self.profile_to_right_constraint.constant;
     _profile_to_left_const = self.profile_to_left_constraint.constant;
     
     
-    UIBarButtonItem*leftBtnItem = [[UIBarButtonItem alloc]initWithTitle:@"switch" style: UIBarButtonItemStyleDone target:self action:@selector(onLeftNaviItemClick:)];
+    UIBarButtonItem*leftBtnItem = [[UIBarButtonItem alloc] initWithTitle:@"switch" style: UIBarButtonItemStyleDone target:self action:@selector(onLeftNaviItemClick:)];
     
     self.navigationItem.leftBarButtonItem = leftBtnItem;
     
@@ -163,14 +169,18 @@
     pro.tag = enTransferType_user;
     pro.data = _selfUserInfo;
     
-    [self.socket writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+    //[self.socket writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+    [self.socket writeData:[publicFunc transforObToData:pro] withTimeout:-1 tag:0];
     [self.socket readDataWithTimeout:-1 tag:0];
     
 }
 
+
+
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag;
 {
     NSLog(@"[Client] Received: %lu", (unsigned long)[data length]);
+    
     
     // parser data
     NSError *error = nil;
@@ -179,7 +189,30 @@
         transferProtocolInfo *transfer = [transferProtocolInfo modelWithDict:tranferDic];
         [self _parserData:transfer socket:sock data:data];
     }
-    
+    else
+    {
+        // not for json traslater
+        [_msgDataCache appendData:data];
+        
+        NSInteger sizeInt = sizeof(NSInteger);
+        if ( [_msgDataCache length] > sizeInt )
+        {
+            void *readOffset = [_msgDataCache mutableBytes];
+            NSInteger msgSize = 0;
+            memcpy(&msgSize, readOffset, sizeInt);
+            NSData *msgData = [NSData dataWithBytes:readOffset + sizeInt length:msgSize - sizeInt];
+            transferProtocolInfo *transfer = [NSKeyedUnarchiver unarchiveObjectWithData:msgData];
+            
+            [self _parserData:transfer socket:sock data:data];
+            
+            // remove bytes
+            [_msgDataCache replaceBytesInRange:NSMakeRange(0, msgSize) withBytes:NULL length:0];
+            
+        }
+
+         
+        
+    }
     
     [sock readDataWithTimeout:-1 tag:0];
 }
@@ -404,7 +437,10 @@
         NSData *sendData = [publicFunc objetToJson:[pro getStructerData]];
         //NSLog(@"___send:%@",[[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding]);
         
-        [strongSelf.socket writeData:sendData withTimeout:-1 tag:0];
+        NSLog(@"senddata:\n\n%@\n\n",sendData);
+        
+        [strongSelf.socket writeData:[publicFunc transforObToData:pro] withTimeout:-1 tag:0];
+       //[strongSelf.socket writeData:sendData withTimeout:-1 tag:0];
         [strongSelf.socket readDataWithTimeout:-1 tag:0];
         
         dispatch_async(dispatch_get_main_queue(), ^{

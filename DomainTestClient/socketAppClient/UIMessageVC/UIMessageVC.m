@@ -21,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *inputTextfield;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *inputBgView_toBottom_constraint;
 
-@property (nonatomic,copy  ) UIMessageVCSBack msgCallBackBlock;
+@property (nonatomic,copy) UIMessageVCSBack msgCallBackBlock;
 
 @end
 

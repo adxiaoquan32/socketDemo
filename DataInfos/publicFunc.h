@@ -16,5 +16,6 @@
 
 + (NSString *)getSystemUUID;
 + (NSData* )objetToJson:(id)data;
++ (NSData*)transforObToData:(id)pro;
 
 @end

@@ -18,6 +18,7 @@
 @interface DomainServer()
 
 @property (strong,nonatomic) imUserInfo *serverUser;
+@property (strong, nonatomic)NSMutableData *msgDataCache;
 
 @end
 
@@ -87,6 +88,7 @@
     
 	_connectedSockets = [NSMutableSet new];
     _totalconnectedSockets = [NSMutableSet new];
+    _msgDataCache = [[NSMutableData alloc] init];
     
     _serverUser = [[imUserInfo alloc] init];
     _serverUser.userID = @"xxxxxxx-server-xxxxxx";
@@ -152,7 +154,8 @@
     pro.data = textMsg;
     
     [self.connectedSockets enumerateObjectsUsingBlock:^(GCDAsyncSocket * sock, BOOL * _Nonnull stop) {
-        [sock writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+        //[sock writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+        [sock writeData:[publicFunc transforObToData:pro] withTimeout:-1 tag:0];
     }];
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  Me: %@\n",self.inputView.stringValue] attributes:@{ NSForegroundColorAttributeName :[NSColor colorWithSRGBRed:1 green:0 blue:0 alpha:1] }];
@@ -167,6 +170,7 @@
 {
     NSLog(@"[Server] Received: %lu :%@", (unsigned long)[data length],[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
   
+    
     // parser data
     NSError *error = nil;
     id tranferDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
@@ -176,7 +180,28 @@
         transferProtocolInfo *transfer = [transferProtocolInfo modelWithDict:tranferDic];
         [self _parserData:transfer socket:sock data:data];
     }
-    
+    else
+    {
+        // not for json traslater
+        [_msgDataCache appendData:data];
+        
+        NSInteger sizeInt = sizeof(NSInteger);
+        if ( [_msgDataCache length] > sizeInt )
+        {
+            void *readOffset = [_msgDataCache mutableBytes];
+            NSInteger msgSize = 0;
+            memcpy(&msgSize, readOffset, sizeInt);
+            NSData *msgData = [NSData dataWithBytes:readOffset + sizeInt length:msgSize - sizeInt];
+            transferProtocolInfo *transfer = [NSKeyedUnarchiver unarchiveObjectWithData:msgData];
+            
+            [self _parserData:transfer socket:sock data:data];
+            
+            // remove bytes
+            [_msgDataCache replaceBytesInRange:NSMakeRange(0, msgSize) withBytes:NULL length:0];
+            
+        }
+    }
+
     [sock readDataWithTimeout:-1 tag:0];
 }
 
@@ -318,7 +343,9 @@
         transferProtocolInfo *pro = [transferProtocolInfo new];
         pro.tag = enTransferType_userList;
         pro.data = alluserExitself;
-        NSData *wdata = [publicFunc objetToJson:[pro getStructerData]];
+        //NSData *wdata = [publicFunc objetToJson:[pro getStructerData]];
+        NSData *wdata = [publicFunc transforObToData:pro];
+        
         NSLog(@"___write:\n%@\n",[[NSString alloc] initWithData:wdata encoding:NSUTF8StringEncoding]);
         [sock writeData:wdata withTimeout:-1 tag:0];
     }
@@ -357,7 +384,9 @@
             transferProtocolInfo *pro = [transferProtocolInfo new];
             pro.tag = enTransferType_user;
             pro.data = lostconntectUser;
-            [userInfo.socket writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+            //[userInfo.socket writeData:[publicFunc objetToJson:[pro getStructerData]] withTimeout:-1 tag:0];
+            [userInfo.socket writeData:[publicFunc transforObToData:pro] withTimeout:-1 tag:0];
+            
         }
     }
   
