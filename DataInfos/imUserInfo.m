@@ -24,6 +24,7 @@
         self.userID = [dict objectForKey:@"userID"];
         self.userName = [dict objectForKey:@"userName"];
         self.state = [[dict objectForKey:@"state"] integerValue];
+        self.socket = nil;
     }
     return self;
 }

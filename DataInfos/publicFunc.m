@@ -63,11 +63,17 @@
 + (NSData*)transforObToData:(id)pro
 {
     // test
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pro];
-    NSInteger length = [data length] + sizeof(NSInteger);
-    NSMutableData *rdata = [[NSMutableData alloc] initWithData:[NSData dataWithBytes:&length length:sizeof(NSInteger)]];
-    [rdata appendData:data];
-    
+    NSMutableData *rdata = nil;
+    @try {
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pro];
+        NSInteger length = [data length] + sizeof(NSInteger);
+        rdata = [[NSMutableData alloc] initWithData:[NSData dataWithBytes:&length length:sizeof(NSInteger)]];
+        [rdata appendData:data];
+    } @catch (NSException *exception) {
+        
+    } @finally {
+        
+    }
     return rdata;
 }
 
